@@ -44,16 +44,16 @@ public class Player : MonoBehaviour
 
         if (h < 0)
         {
-            GetComponent<Animator>().SetBool("Walk", true);
+            GetComponent<Animator>().SetBool("IsMove", true);
             transform.localScale = new Vector3(-1, 1, 1);
         }
         else if (h == 0)
         {
-            GetComponent<Animator>().SetBool("Walk", false);
+            GetComponent<Animator>().SetBool("IsMove", false);
         }
         else
         {
-            GetComponent<Animator>().SetBool("Walk", true);
+            GetComponent<Animator>().SetBool("IsMove", true);
             transform.localScale = new Vector3(1, 1, 1);
         }
 
@@ -63,8 +63,8 @@ public class Player : MonoBehaviour
     {
         if (isJump == false)
         {
-            GetComponent<Animator>().SetBool("Walk", false);
-            GetComponent<Animator>().SetBool("Jump", true);
+            GetComponent<Animator>().SetBool("IsMove", false);
+            GetComponent<Animator>().SetBool("IsJump", true);
 
             Vector2 vector2 = new Vector2(0, jumpForce);
             GetComponent<Rigidbody2D>().AddForce(vector2);
@@ -76,13 +76,14 @@ public class Player : MonoBehaviour
     {
         if (collision.collider.tag == "Platform")
         {
-            GetComponent<Animator>().SetBool("Jump", false);
+            GetComponent<Animator>().SetBool("IsJump", false);
             isJump = false;
         }
     }
 
     private void Fire()
     {
+        GetComponent<AudioSource>().Play();
         float direction = transform.localScale.x;
         Quaternion quaternion = new Quaternion(0, 0, 0, 0);
         Instantiate(bulletObj, bulletPos.transform.position, quaternion).GetComponent<Bullet>().InstantiateBullet(direction);
