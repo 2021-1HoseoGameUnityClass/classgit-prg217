@@ -18,10 +18,16 @@ public class Player : MonoBehaviour
 
     private bool isJump = false;
 
+    private bool move = false;
+    private float moveHor = 1;
+
     // Update is called once per frame
     void Update()
     {
-        PlayerMove();
+        if (move == true)
+        {
+            PlayerMove();
+        }
 
         if (Input.GetButtonDown("Jump"))
         {
@@ -36,7 +42,8 @@ public class Player : MonoBehaviour
 
     private void PlayerMove()
     {
-        float h = Input.GetAxis("Horizontal");
+        //float h = Input.GetAxis("Horizontal");
+        float h = moveHor;
         float playerSpeed = h * moveSpeed * Time.deltaTime;
         Vector3 vector3 = new Vector3();
         vector3.x = playerSpeed;
@@ -83,9 +90,30 @@ public class Player : MonoBehaviour
 
     private void Fire()
     {
+        AudioClip audioClip = Resources.Load<AudioClip>("RangedAttack") as AudioClip;
+        GetComponent<AudioSource>().clip = audioClip;
         GetComponent<AudioSource>().Play();
         float direction = transform.localScale.x;
         Quaternion quaternion = new Quaternion(0, 0, 0, 0);
         Instantiate(bulletObj, bulletPos.transform.position, quaternion).GetComponent<Bullet>().InstantiateBullet(direction);
+    }
+
+    public void OnMove(bool _right)
+    {
+        if (_right)
+        {
+            moveHor = 1;
+        }
+        else
+        {
+            moveHor = -1;
+        }
+
+        move = true;
+    }
+
+    public void OffMove()
+    {
+        move = false;
     }
 }
